@@ -1,0 +1,32 @@
+# 选择node环境作为构建阶段
+FROM node:16 AS build-stage
+
+# 设置工作目录
+WORKDIR /app
+
+# 将package.json和package-lock.json复制到容器中
+COPY package*.json ./
+
+# 安装依赖
+RUN npm install
+
+# 将项目代码复制到容器中
+COPY . .
+
+# 打包项目
+RUN npm run build
+
+# Nginx用于托管打包后的静态文件
+FROM nginx:alpine AS production-stage
+
+# 将Nginx配置文件替换为自定义配置文件
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 将打包后的静态文件复制到Nginx的html目录
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# 暴露80端口
+EXPOSE 80
+
+# 启动Nginx
+CMD ["nginx", "-g", "daemon off;"]

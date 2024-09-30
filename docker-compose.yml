@@ -1,0 +1,53 @@
+version: '3'
+services:
+  # Vue前端
+  frontend:
+    build:
+      context: ./health_manage_vue   # 指定Vue项目的根目录
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./health_manage_vue:/app  # 将本地 Vue 项目目录挂载到容器中的 /app
+    #   - /app/node_modules  # 忽略 node_modules 以防止本地和容器内的冲突
+    # working_dir: /app
+    # command: npm run serve  # 使用开发模式启动 Vue 项目
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    ports:
+      - "8080:80"  # 将容器的80端口映射到主机的8080端口
+    depends_on:
+      - backend  # 确保后端先启动
+
+  # Spring Boot后端
+  backend:
+    build:
+      context: ./health_manage_springboot  # 指定Spring Boot项目的根目录
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./health_manage_springboot:/app  # 挂载本地 Spring Boot 项目目录
+    #   - /root/.m2  # 挂载 Maven 缓存目录，以避免重复下载依赖
+    # working_dir: /app
+    # command: mvn spring-boot:run  # 使用开发模式启动 Spring Boot 项目
+    ports:
+      - "9091:9091"  # 映射后端服务端口
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/health?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456
+    depends_on:
+      - db  # 确保数据库先启动
+
+  # MySQL数据库
+  db:
+    image: mysql:8.0  # MySQL镜像
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456  # 设置root密码
+      MYSQL_DATABASE: health  # 初始化数据库
+    volumes:
+      - db_data:/var/lib/mysql  # 挂载卷，用于持久化存储
+      - /mnt/d/Desktop/project/health_management.sql:/docker-entrypoint-initdb.d/health_management.sql  # 挂载SQL文件
+    ports:
+      - "3306:3306"  # 映射MySQL端口
+
+volumes:
+  db_data:  # 数据卷用于存储MySQL数据

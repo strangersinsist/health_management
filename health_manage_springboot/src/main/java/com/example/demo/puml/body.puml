@@ -1,0 +1,64 @@
+@startuml
+skinparam classBackgroundColor transparent
+skinparam classBorderColor black
+skinparam Shadowing false
+skinparam ArrowColor black
+skinparam defaultFontSize 17
+
+class BodyController{
+- bodymapper: BodyMapper
++ save(Body): Result<Body>
++ delete(Long): Result<Body>
++ update(Body): Result<Body>
++ findPage(Integer, Integer, String): Result<Body>
+}
+
+class Body {
+-id: int
+-name: String
+-age: int
+-gender: String
+-height: float
+-weight: float
+-bloodSugar: float
+-bloodPressureH: float
+-bloodPressureL: float
+-bloodLipid: float
+-heartRate: double
+-vision: int
+-sleepDuration: double
+-sleepQuality: String
+-smoking: int
+-drinking: int
+-exercise: int
+-foodTypes: String
+-waterConsumption: double
+-date: Timestamp
+}
+interface BodyMapper {
+}
+interface BaseMapper<Body> {
++ insert(Body): int
++ deleteById(int): int
++ delete(Wrapper<Body>): int
++ deleteBatchIds(Collection<? extends Serializable>): int
++ deleteById(Serializable): int
++ deleteByMap(Map<String, Object>): int
++ update(Body, Wrapper<Body>): int
++ updateById(Body): int
++ selectById(Serializable): Body
++ selectOne(Wrapper<Body>): Body
++ selectBatchIds(Collection<? extends Serializable>): List<Body>
++ selectList(Wrapper<Body> queryWrapper): List<Body>
++ selectByMap(Map<String, Object>): List<Body>
++ selectMaps(Wrapper<Body>): List<Map<String, Object>>
++ selectObjs(Wrapper<Body>): List<Object>
++ selectPage(IPage<Body>, Wrapper<Body>): IPage<Body>
++ selectMapsPage(IPage<Body>, Wrapper<Body>): IPage<Map<String, Object>>
++ selectCount(Wrapper<Body>): Integer
+}
+
+BodyMapper --|> BaseMapper
+BodyController ..> BodyMapper
+BodyMapper -- Body
+@enduml
