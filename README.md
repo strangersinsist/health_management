@@ -1,5 +1,5 @@
 # 健康管理系统说明文档
-本项目从[AIJavaGroup/project](https://gitee.com/AIJavaGroup/project)转载，归属于[AIJavaGroup](https://gitee.com/AIJavaGroup)。用于练习使用docker。使用方法见[docker学习笔记](https://strangersinsist.github.io/2024/09/25/docker%E5%AD%A6%E4%B9%A0/#more)
+本项目从[AIJavaGroup/project](https://gitee.com/AIJavaGroup/project)转载，归属于[AIJavaGroup](https://gitee.com/AIJavaGroup)。用于练习使用docker。使用方法见[docker学习笔记](https://strangersinsist.github.io/2024/09/25/docker_learn/#more)
 ## 概述
 
 健康管理系统旨在为用户提供一个全面的健康监测和管理平台，通过一系列功能模块帮助用户维护和提升自己的健康水平。
